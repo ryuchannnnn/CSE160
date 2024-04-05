@@ -1,1 +1,8 @@
 # CSE 160
+
+## 
+This is the main directory for CSE 160 Spring 2024
+
+## Assignment Links 
+Assignment 0 - Vector Library 
+https://ryuchannnnn.github.io/CSE160/asgn0/asg0.html
