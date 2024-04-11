@@ -1,6 +1,4 @@
 # CSE 160
-
-## 
 This is the main directory for CSE 160 Spring 2024
 
 ## Assignment Links 
