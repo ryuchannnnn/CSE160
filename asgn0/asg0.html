@@ -27,5 +27,23 @@
     <input type="text" id="v2y" name="v2y"/>
     <br>
     <button onclick="handleDrawEvent()">Draw</button>
+    <br>
+    <br>
+    <label for="operation-select">Operation:</label>
+    <select name="Operation" id="operationMenu">
+      <option value="Add">Add</option>
+      <option value="Subtract">Subtract</option>
+      <option value="Multiply">Multiply</option>
+      <option value="Divide">Divide</option>
+      <option value="Magnitude">Magnitude</option>
+      <option value="Normalize">Normalize</option>
+      <option value="Angle between">Angle between</option>
+      <option value="Area">Area</option>
+    </select>
+    <label for="scalar">Scalar:</label>
+    <input type="text" id="scalar" size="10">
+    <br>
+    <br>
+    <input type="button" value="Draw" onclick="handleDrawOperationEvent()"></input>
   </body>
 </html>
