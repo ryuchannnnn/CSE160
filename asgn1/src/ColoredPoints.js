@@ -78,6 +78,9 @@ let g_selectedColor = [1.0,1.0,1.0,1.0];
 let g_selectedSize=5;
 let g_selectedType = POINT;
 
+var redColor = [1.0,0.0,0.0,1.0];
+var greenColor = [0.0,1.0,0.0,1.0];
+
 // set up actions for HTML UI elements
 function addActionsForHtmlUI(){
 
@@ -89,6 +92,8 @@ function addActionsForHtmlUI(){
   document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
   document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
   document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
+  
+  document.getElementById('strawberry').onclick = function() {redColor; generateStrawberryRed();};
 
   // slider events
   document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100; });
@@ -191,4 +196,58 @@ function sendTextToHTML(text,htmlID){
     return;
   }
   htmlElm.innerHTML = text;
+}
+
+function generateStrawberryRed(){
+  // strawberry
+  var t1 = new Triangle();
+  t1.color = redColor;
+  t1.size = 25.0;
+  // tri1
+  generateStrawberryBits([-0.2,-0.6, 0,-0.9, 0.2,-0.6], redColor, t1.size);
+  // tri 5          Top left // middle pointing down // top right point
+  generateStrawberryBits([-0.58,0.2, -0.4,-0.18, -0.28,0.2], redColor, t1.size);
+  // tri 10
+  generateStrawberryBits([0.58,0.2, 0.4,-0.18, 0.28,0.2], redColor, t1.size);
+  // tri 2
+  generateStrawberryBits([-0.4,-0.2, -0.1,-0.35, -0.2, -0.55], redColor, t1.size);
+  // tri 4
+  generateStrawberryBits([0.4,-0.2, 0.1,-0.35, 0.2, -0.55], redColor, t1.size);
+  var t2 = new Triangle();
+  t2.size = 5.0;
+  // tri 3
+  generateStrawberryBits([-0.17, -0.55, 0,-0.3, 0.17, -0.55], redColor, t2.size);
+  var t3 = new Triangle();
+  t3.size = 10.0;
+  // tri 7
+  generateStrawberryBits([-0.35, -0.1, -0.12,-0.3, 0.001,-0.1],redColor, t3.size);
+  // tri 8 
+  generateStrawberryBits([0.005, -0.1, 0.12,-0.3, 0.35,-0.1],redColor, t3.size);
+  // tri 6
+  generateStrawberryBits([-0.25,0.2, -0.12,-0.09, 0.005,0.2],redColor, t3.size);
+  // tri 9 
+  generateStrawberryBits([0.005, 0.2, 0.12,-0.09, 0.25,0.2],redColor, t3.size);
+
+  var t4 = new Triangle();
+  t4.color = greenColor;
+  // t11
+  generateStrawberryBits([-0.35, 0.4, -0.48, 0.6, -0.46, 0.2], greenColor, t1.size);
+  // t12
+  generateStrawberryBits([-0.6, 0.4, -0.48, 0.6, -0.46, 0.2], greenColor, t1.size);
+  // t13
+  generateStrawberryBits([-0.33, 0.405, -0.20, 0.6, -0.195, 0.215], greenColor, t1.size);
+  // t14
+  generateStrawberryBits([-0.08, 0.405, -0.20, 0.6, -0.195, 0.215], greenColor, t1.size);
+  // t15 
+  generateStrawberryBits([-0.075, 0.405, 0.05, 0.595, 0.06, 0.225], greenColor, t1.size);
+  // t16 
+  generateStrawberryBits([0.175, 0.405, 0.05, 0.595, 0.06, 0.225], greenColor, t1.size);
+  // t17
+  generateStrawberryBits([0.15, 0.405, 0.278, 0.595, 0.27, 0.245], greenColor, t1.size);
+  // t18
+  generateStrawberryBits([0.40, 0.405, 0.278, 0.595, 0.27, 0.245], greenColor, t1.size);
+  // t19
+  generateStrawberryBits([0.415, 0.405, 0.53, 0.585, 0.53, 0.23], greenColor, t1.size);
+  // t20
+  generateStrawberryBits([0.635, 0.405, 0.53, 0.585, 0.53, 0.23], greenColor, t1.size);
 }

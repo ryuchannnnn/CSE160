@@ -8,6 +8,7 @@ class Point{
   
     render() {
       var xy = this.position;
+      console.log(xy);
       var rgba = this.color;
       var size = this.size;
       // var xy = g_points[i];

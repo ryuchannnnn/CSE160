@@ -50,3 +50,11 @@ function drawTriangle(vertices) {
   gl.drawArrays(gl.TRIANGLES, 0, n);
 
 }
+
+function generateStrawberryBits(vertices, rgba, size) {
+  // Pass the color of a point to u_FragColor variable
+  gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+  // Pass the size of a point to u_Size variable
+  gl.uniform1f(u_Size, size);
+  drawTriangle(vertices);
+}
