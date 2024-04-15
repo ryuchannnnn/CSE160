@@ -75,8 +75,9 @@ const CIRCLE = 2;
 
 // globals related to UI elements
 let g_selectedColor = [1.0,1.0,1.0,1.0];
-let g_selectedSize=5;
+let g_selectedSize=100;
 let g_selectedType = POINT;
+let g_numSegments = 100;
 
 var redColor = [1.0,0.0,0.0,1.0];
 var greenColor = [0.0,1.0,0.0,1.0];
@@ -103,6 +104,7 @@ function addActionsForHtmlUI(){
 
   // size slider events
   document.getElementById('sizeSlide').addEventListener('mouseup', function() {g_selectedSize = this.value; });
+  document.getElementById("segmentSlide").addEventListener("mouseup", function () {g_numSegments = this.value;});
 
 }
 
@@ -144,6 +146,7 @@ function click(ev) {
     point = new Triangle();
   } else {
     point = new Circle();
+    point.segments = g_numSegments;
   }
   point.position = [x,y];
   point.color = g_selectedColor.slice();
