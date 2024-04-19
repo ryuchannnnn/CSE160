@@ -1,6 +1,6 @@
-import * as THREE from './lib/three.module.js';
-import { OBJLoader } from './lib/OBJLoader.js';
-import { MTLLoader } from './lib/MTLLoader.js';
+import * as THREE from '../lib/three.module.js';
+import { OBJLoader } from '../lib/OBJLoader.js';
+import { MTLLoader } from '../lib/MTLLoader.js';
 
 function main() {
 	const canvas = document.querySelector( '#c' );
@@ -18,7 +18,7 @@ function main() {
     {
         const loader = new THREE.TextureLoader();
         const texture = loader.load(
-            './assets/blueSky.jpg',
+            '../assets/blueSky.jpg',
             () => {
 
                 texture.mapping = THREE.EquirectangularReflectionMapping;
@@ -45,7 +45,7 @@ function main() {
 		const boxDepth = 0.55;
 		const geometry = new THREE.BoxGeometry( boxWidth, boxHeight, boxDepth );
 		const loader = new THREE.TextureLoader();
-		const material = new THREE.MeshPhongMaterial({map: loader.load('./assets/shinyMudkip.jpg')});
+		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
 		cube.position.set(0.25,0,0);
 		scene.add( cube );
@@ -78,10 +78,10 @@ function main() {
     {
         const mtlLoader = new MTLLoader();
         const objLoader = new OBJLoader();
-        mtlLoader.load('./assets/Hamster_01.mtl', (mtl) => {
+        mtlLoader.load('../assets/Hamster_01.mtl', (mtl) => {
           mtl.preload();
           objLoader.setMaterials(mtl);
-          objLoader.load('./assets/Hamster_01.obj', (root) => {
+          objLoader.load('../assets/Hamster_01.obj', (root) => {
             root.traverse(function(child){child.castShadow = true;child.receiveShadow = true;});
             root.scale.set(1, 1, 1);
             root.position.set(0, 0.405, 1);
