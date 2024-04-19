@@ -45,7 +45,7 @@ function main() {
 		const boxDepth = 0.55;
 		const geometry = new THREE.BoxGeometry( boxWidth, boxHeight, boxDepth );
 		const loader = new THREE.TextureLoader();
-		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
+		const material = new THREE.MeshPhongMaterial({map: loader.load('./assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
 		cube.position.set(0.25,0,0);
 		scene.add( cube );
