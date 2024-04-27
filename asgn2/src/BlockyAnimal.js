@@ -37,6 +37,8 @@ function setUpWebGL() {
     return;
   }
 
+  gl.enable(gl.DEPTH_TEST);
+
 }
 
 function connectVariablesToGLSL(){
@@ -85,10 +87,14 @@ const CIRCLE = 2;
 
 // globals related to UI elements
 let g_selectedColor = [1.0,1.0,1.0,1.0];
-let g_selectedSize=100;
+let g_selectedSize=5;
 let g_selectedType = POINT;
 let g_numSegments = 100;
+let g_yellowAngle = 0;
+let g_magentaAngle = 0;
 let g_globalAngle = 0;
+let g_yellowAnimation=false;
+let g_magentaAnimation=false;
 
 var redColor = [1.0,0.0,0.0,1.0];
 var greenColor = [0.0,1.0,0.0,1.0];
@@ -97,18 +103,14 @@ var greenColor = [0.0,1.0,0.0,1.0];
 function addActionsForHtmlUI(){
 
   // button events
-  document.getElementById('green').onclick = function() {g_selectedColor = [0.0,1.0,0.0,1.0];};
-  document.getElementById('red').onclick = function() {g_selectedColor = [1.0,0.0,0.0,1.0];};
-  document.getElementById('clearButton').onclick = function() {g_shapesList = []; renderAllShapes();};
+  document.getElementById('animationMagentaOffButton').onclick = function() {g_magentaAnimation=false;};
+  document.getElementById('animationMagentaOnButton').onclick = function() {g_magentaAnimation=true;};
 
-  document.getElementById('pointButton').onclick = function() {g_selectedType=POINT};
-  document.getElementById('triButton').onclick = function() {g_selectedType=TRIANGLE};
-  document.getElementById('circleButton').onclick = function() {g_selectedType=CIRCLE};
-
-  // slider events
-  document.getElementById('redSlide').addEventListener('mouseup', function() {g_selectedColor[0] = this.value/100; });
-  document.getElementById('greenSlide').addEventListener('mouseup', function() {g_selectedColor[1] = this.value/100; });
-  document.getElementById('blueSlide').addEventListener('mouseup', function() {g_selectedColor[2] = this.value/100; });
+  document.getElementById('animationYellowOffButton').onclick = function() {g_yellowAnimation=false;};
+  document.getElementById('animationYellowOnButton').onclick = function() {g_yellowAnimation=true;};
+  // // slider events
+  document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes(); });
+  document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes(); });
 
   // size slider events
   document.getElementById('angleSlide').addEventListener('mousemove', function() {g_globalAngle = this.value; renderAllShapes(); });
@@ -135,7 +137,28 @@ function main() {
 
   // Clear <canvas>
   // gl.clear(gl.COLOR_BUFFER_BIT);
-    renderAllShapes();
+    // renderAllShapes();
+    requestAnimationFrame(tick);
+}
+
+var g_startTime = performance.now()/1000.0;
+var g_seconds = performance.now()/1000.0-g_startTime;
+
+function tick() {
+  g_seconds = performance.now()/1000.0-g_startTime;
+  updateAnimationAngles();
+  renderAllShapes();
+  requestAnimationFrame(tick);
+}
+
+function updateAnimationAngles(){
+  if(g_yellowAnimation){
+    g_yellowAngle = (45*Math.sin(g_seconds)); 
+  }
+
+  if(g_magentaAnimation){
+    g_magentaAngle = (45*Math.sin(3*g_seconds)); 
+  }
 }
 
 
@@ -189,29 +212,45 @@ function renderAllShapes(){
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   // drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
 
   var body = new Cube();
   body.color = [1.0,0.0,0.0,1.0];
-  body.matrix.translate(-.25,-.5,0.0);
-  body.matrix.scale(0.5,1,.5);
+  body.matrix.translate(-.25,-.75,0.0);
+  body.matrix.rotate(-5,1,0,0);
+  body.matrix.scale(0.5,.3,.5);
   body.render();
 
-  var leftArm = new Cube();
-  leftArm.color = [1,1,0,1];
-  leftArm.matrix.translate(.7,0,0.0);
-  leftArm.matrix.rotate(45,0,0,1);
-  leftArm.matrix.scale(0.25,.7,.5);
-  leftArm.render();
+  var yellow = new Cube();
+  yellow.color = [1,1,0,1];
+  yellow.matrix.setTranslate(0,-.5,0.0);
+  yellow.matrix.rotate(-5,1,0,0);
+  yellow.matrix.rotate(-g_yellowAngle,0,0,1); 
+  var yellowCoordinatesMat = new Matrix4(yellow.matrix);
+  yellow.matrix.scale(0.25,.7,.5);
+  yellow.matrix.translate(-.5,0,0);
+  yellow.render();
 
   var box = new Cube();
   box.color = [1,0,1,1];
-  box.matrix.translate(0,0,-.5,0);
-  box.matrix.rotate(-30,1,0,0);
-  box.matrix.scale(.5,.5,.5);
+  box.matrix = yellowCoordinatesMat;
+  box.matrix.translate(0,0.65,0);
+  box.matrix.rotate(g_magentaAngle,0,0,1);
+  box.matrix.scale(.3,.3,.3);
+  box.matrix.translate(-.5,0,-.001);
   box.render();
+
+  var K = 10.0;
+  for (var i = 1; i < K; i++) {
+    var c = new Cube();
+    c.matrix.translate(-.8,1.9*i/K-1.0,0);
+    c.matrix.rotate(g_seconds*100,1,1,1);
+    c.matrix.scale(.1,0.5/K,1.0/K);
+    c.render();
+  }
 
   // check the time at the end of the function and show on webpage
   var duration = performance.now() - startTime;
