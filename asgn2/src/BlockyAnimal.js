@@ -353,21 +353,117 @@ function renderSnorlax() {
   snorlaxsRightEar.color = snorlaxColor;
   snorlaxsRightEar.render();
 
-  var snorlaxsLeftArm = new Cube();
-  snorlaxsLeftArm.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsLeftArm.matrix.rotate(0,0,0,1);
-  snorlaxsLeftArm.matrix.scale(.3,.25,.4);
-  snorlaxsLeftArm.matrix.translate(-1,2.5,.9);
-  snorlaxsLeftArm.color = snorlaxColor;
-  snorlaxsLeftArm.render();
+  var snorlaxsLeftArmJ1 = new Cube();
+  snorlaxsLeftArmJ1.matrix = new Matrix4(snorlaxBody.matrix);
+  snorlaxsLeftArmJ1.matrix.rotate(0,0,0,1);
+  snorlaxsLeftArmJ1.matrix.scale(.15,.25,.4);
+  snorlaxsLeftArmJ1.matrix.translate(-1,2.5,.9);
+  snorlaxsLeftArmJ1.color = snorlaxColor;
+  snorlaxsLeftArmJ1.render();
 
-  var snorlaxsRightArm = new Cube();
-  snorlaxsRightArm.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsRightArm.matrix.rotate(0,0,0,1);
-  snorlaxsRightArm.matrix.scale(.3,.25,.4);
-  snorlaxsRightArm.matrix.translate(3.33,2.5,.9);
-  snorlaxsRightArm.color = snorlaxColor;
-  snorlaxsRightArm.render();
+  var snorlaxsLeftArmJ2 = new Cube();
+  snorlaxsLeftArmJ2.matrix = new Matrix4(snorlaxsLeftArmJ1.matrix);
+  snorlaxsLeftArmJ2.matrix.rotate(0,0,0,1);
+  snorlaxsLeftArmJ2.matrix.scale(1,1,1);
+  snorlaxsLeftArmJ2.matrix.translate(-1,0,0);
+  snorlaxsLeftArmJ2.color = snorlaxColor;
+  snorlaxsLeftArmJ2.render();
+
+  var snorlaxsLeftClaw1 = new Cone();
+  snorlaxsLeftClaw1.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
+  snorlaxsLeftClaw1.color = snorlaxNailColor;
+  snorlaxsLeftClaw1.matrix.translate(-0.20,0.5,0.2);
+  snorlaxsLeftClaw1.matrix.scale(1,1,1);
+  snorlaxsLeftClaw1.matrix.rotate(180,1,0,1);
+  snorlaxsLeftClaw1.render();
+
+  var snorlaxsLeftClaw2 = new Cone();
+  snorlaxsLeftClaw2.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
+  snorlaxsLeftClaw2.color = snorlaxNailColor;
+  snorlaxsLeftClaw2.matrix.translate(-0.20,0.5,0.4);
+  snorlaxsLeftClaw2.matrix.scale(1,1,1);
+  snorlaxsLeftClaw2.matrix.rotate(180,1,0,1);
+  snorlaxsLeftClaw2.render();
+
+  var snorlaxsLeftClaw3 = new Cone();
+  snorlaxsLeftClaw3.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
+  snorlaxsLeftClaw3.color = snorlaxNailColor;
+  snorlaxsLeftClaw3.matrix.translate(-0.20,0.5,0.6);
+  snorlaxsLeftClaw3.matrix.scale(1,1,1);
+  snorlaxsLeftClaw3.matrix.rotate(180,1,0,1);
+  snorlaxsLeftClaw3.render();
+
+  var snorlaxsLeftClaw4 = new Cone();
+  snorlaxsLeftClaw4.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
+  snorlaxsLeftClaw4.color = snorlaxNailColor;
+  snorlaxsLeftClaw4.matrix.translate(-0.20,0.5,0.8);
+  snorlaxsLeftClaw4.matrix.scale(1,1,1);
+  snorlaxsLeftClaw4.matrix.rotate(180,1,0,1);
+  snorlaxsLeftClaw4.render();
+
+  var snorlaxsLeftClaw5 = new Cone();
+  snorlaxsLeftClaw5.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
+  snorlaxsLeftClaw5.color = snorlaxNailColor;
+  snorlaxsLeftClaw5.matrix.translate(-0.20,0.5,1);
+  snorlaxsLeftClaw5.matrix.scale(1,1,1);
+  snorlaxsLeftClaw5.matrix.rotate(180,1,0,1);
+  snorlaxsLeftClaw5.render();
+
+  var snorlaxsRightArmJ1 = new Cube();
+  snorlaxsRightArmJ1.matrix = new Matrix4(snorlaxBody.matrix);
+  snorlaxsRightArmJ1.matrix.rotate(0,0,0,1);
+  snorlaxsRightArmJ1.matrix.scale(.15,.25,.4);
+  snorlaxsRightArmJ1.matrix.translate(6.66,2.5,.9);
+  snorlaxsRightArmJ1.color = snorlaxColor;
+  snorlaxsRightArmJ1.render();
+
+  var snorlaxsRightArmJ2 = new Cube();
+  snorlaxsRightArmJ2.matrix = new Matrix4(snorlaxsRightArmJ1.matrix);
+  snorlaxsRightArmJ2.matrix.rotate(0,0,0,1);
+  snorlaxsRightArmJ2.matrix.scale(1,1,1);
+  snorlaxsRightArmJ2.matrix.translate(1,0,0);
+  snorlaxsRightArmJ2.color = snorlaxColor;
+  snorlaxsRightArmJ2.render();
+
+  var snorlaxsRightClaw1 = new Cone();
+  snorlaxsRightClaw1.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
+  snorlaxsRightClaw1.color = snorlaxNailColor;
+  snorlaxsRightClaw1.matrix.translate(1.20,.5,0.2);
+  snorlaxsRightClaw1.matrix.scale(1,1,1);
+  snorlaxsRightClaw1.matrix.rotate(270,0,1,0);
+  snorlaxsRightClaw1.render();
+
+  var snorlaxsRightClaw2 = new Cone();
+  snorlaxsRightClaw2.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
+  snorlaxsRightClaw2.color = snorlaxNailColor;
+  snorlaxsRightClaw2.matrix.translate(1.20,.5,0.4);
+  snorlaxsRightClaw2.matrix.scale(1,1,1);
+  snorlaxsRightClaw2.matrix.rotate(270,0,1,0);
+  snorlaxsRightClaw2.render();
+
+  var snorlaxsRightClaw3 = new Cone();
+  snorlaxsRightClaw3.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
+  snorlaxsRightClaw3.color = snorlaxNailColor;
+  snorlaxsRightClaw3.matrix.translate(1.20,.5,0.6);
+  snorlaxsRightClaw3.matrix.scale(1,1,1);
+  snorlaxsRightClaw3.matrix.rotate(270,0,1,0);
+  snorlaxsRightClaw3.render();
+
+  var snorlaxsRightClaw4 = new Cone();
+  snorlaxsRightClaw4.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
+  snorlaxsRightClaw4.color = snorlaxNailColor;
+  snorlaxsRightClaw4.matrix.translate(1.20,.5,0.8);
+  snorlaxsRightClaw4.matrix.scale(1,1,1);
+  snorlaxsRightClaw4.matrix.rotate(270,0,1,0);
+  snorlaxsRightClaw4.render();
+
+  var snorlaxsRightClaw5 = new Cone();
+  snorlaxsRightClaw5.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
+  snorlaxsRightClaw5.color = snorlaxNailColor;
+  snorlaxsRightClaw5.matrix.translate(1.20,.5,1);
+  snorlaxsRightClaw5.matrix.scale(1,1,1);
+  snorlaxsRightClaw5.matrix.rotate(270,0,1,0);
+  snorlaxsRightClaw5.render();
   
   var snorlaxsLeftFoot = new Cube();
   snorlaxsLeftFoot.matrix = new Matrix4(snorlaxBody.matrix);
