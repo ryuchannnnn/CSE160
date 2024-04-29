@@ -90,33 +90,44 @@ let g_selectedColor = [1.0,1.0,1.0,1.0];
 let g_selectedSize=5;
 let g_selectedType = POINT;
 let g_numSegments = 100;
-let g_yellowAngle = 0;
-let g_magentaAngle = 0;
 let g_globalAngle = 0;
 let g_x = 0;
-let g_Yangle = 0;
 let g_yAngle = 0;
-let g_yellowAnimation=false;
-let g_magentaAnimation=false;
+let g_zAngle = 0;
+let g_animation = false;
+let appleSwitch = false;
+
+// head angle
+let g_headAngle = 0;
+let g_leftArmJoint1 = 0;
+let g_leftArmJoint2 = 0;
+let g_rightArmJoint1 = 0;
+let g_rightArmJoint2 = 0;
+let g_leftFootAngle = 0;
+let g_rightFootAngle = 0;
+let g_leftEarAngle = 0;
+let g_rightEarAngle = 0;
 
 var redColor = [1.0,0.0,0.0,1.0];
 var greenColor = [0.0,1.0,0.0,1.0];
 
 // set up actions for HTML UI elements
 function addActionsForHtmlUI(){
-
-  // button events
-  document.getElementById('animationMagentaOffButton').onclick = function() {g_magentaAnimation=false;};
-  document.getElementById('animationMagentaOnButton').onclick = function() {g_magentaAnimation=true;};
-
-  document.getElementById('animationYellowOffButton').onclick = function() {g_yellowAnimation=false;};
-  document.getElementById('animationYellowOnButton').onclick = function() {g_yellowAnimation=true;};
-  // // slider events
-  document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes(); });
-  document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes(); });
+  // button 
+  document.getElementById('animateOnButton').onclick = function() {g_animation = true;};
+  document.getElementById('animateOffButton').onclick = function() {g_animation = false;};
 
   // size slider events
   document.getElementById('angleSlide').addEventListener('mousemove', function() {g_globalAngle = this.value; renderAllShapes(); });
+  document.getElementById('headSlide').addEventListener('mousemove', function() {g_headAngle = this.value; renderAllShapes(); });
+  document.getElementById('leftArmJointSlide').addEventListener('mousemove', function() {g_leftArmJoint1 = this.value; renderAllShapes(); });
+  document.getElementById('leftArmJoint2Slide').addEventListener('mousemove', function() {g_leftArmJoint2 = this.value; renderAllShapes(); });
+  document.getElementById('rightArmJointSlide').addEventListener('mousemove', function() {g_rightArmJoint1 = this.value; renderAllShapes(); });
+  document.getElementById('rightArmJoint2Slide').addEventListener('mousemove', function() {g_rightArmJoint2 = this.value; renderAllShapes(); });
+  document.getElementById('leftFootAngleSlide').addEventListener('mousemove', function() {g_leftFootAngle = this.value; renderAllShapes(); });
+  document.getElementById('rightFootAngleSlide').addEventListener('mousemove', function() {g_rightFootAngle = this.value; renderAllShapes(); });
+  document.getElementById('leftEarAngleSlide').addEventListener('mousemove', function() {g_leftEarAngle = this.value; renderAllShapes(); });
+  document.getElementById('rightEarAngleSlide').addEventListener('mousemove', function() {g_rightEarAngle = this.value; renderAllShapes(); });
 
 }
 
@@ -136,6 +147,10 @@ function main() {
     let [x,y] = convertCoordinatesEventToGL(e);
     g_lastX = x;
     g_lastY = y;
+
+    if(e.shiftKey) {
+      appleSwitch = !appleSwitch;
+    }
   }
   // canvas.onmousedown = click;
   // canvas.onmousemove = click;
@@ -161,12 +176,16 @@ function tick() {
 }
 
 function updateAnimationAngles(){
-  if(g_yellowAnimation){
-    g_yellowAngle = (45*Math.sin(g_seconds)); 
-  }
-
-  if(g_magentaAnimation){
-    g_magentaAngle = (45*Math.sin(3*g_seconds)); 
+  if(g_animation == true){
+      g_headAngle = (5*Math.sin(g_seconds));
+      g_leftArmJoint1 = (5*Math.sin(g_seconds));
+      g_leftArmJoint2 = (5*Math.sin(g_seconds));
+      g_rightArmJoint1 = (5*Math.sin(g_seconds));
+      g_rightArmJoint2 = (5*Math.sin(g_seconds));
+      g_leftFootAngle = (5*Math.sin(g_seconds));
+      g_rightFootAngle = (5*Math.sin(g_seconds));
+      g_leftEarAngle = (2*Math.sin(g_seconds));
+      g_rightEarAngle = (2*Math.sin(g_seconds));
   }
 }
 
@@ -183,12 +202,12 @@ function click(ev) {
     var dy = 360 * (y - g_lastY)
 
     g_x += dy;
-    g_Yangle += dx;
+    g_yAngle += dx;
     if (Math.abs(g_globalAngle / 360) > 1){
       g_x = 0;
     }
     if (Math.abs(g_yAngle / 360) > 1){
-      g_Yangle = 0;
+      g_zAngle = 0;
     }
 
   }
@@ -217,9 +236,9 @@ function renderAllShapes(){
   var startTime = performance.now();
 
   var globalRotMat=new Matrix4().rotate(g_globalAngle,0,1,0);
-  globalRotMat.rotate(g_yAngle, 1 , 0 ,0);
-  globalRotMat.rotate(g_Yangle, 1 , 0 ,0);
-  globalRotMat.rotate(g_x, 0, 1 ,0);
+  globalRotMat.rotate(g_yAngle, 0 , 1 ,0);
+  globalRotMat.rotate(g_zAngle, 0 , 0 ,1);
+  globalRotMat.rotate(g_x, 1, 0 ,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
 
   // // Clear <canvas>
@@ -228,43 +247,6 @@ function renderAllShapes(){
 
   renderSnorlax();
 
-  // drawTriangle3D([-1.0,0.0,0.0, -0.5,-1.0,0.0, 0.0,0.0,0.0]);
-
-  // var body = new Cube();
-  // body.color = [1.0,0.0,0.0,1.0];
-  // body.matrix.translate(-.25,-.75,0.0);
-  // body.matrix.rotate(-5,1,0,0);
-  // body.matrix.scale(0.5,.3,.5);
-  // body.render();
-
-  // var yellow = new Cube();
-  // yellow.color = [1,1,0,1];
-  // yellow.matrix.setTranslate(0,-.5,0.0);
-  // yellow.matrix.rotate(-5,1,0,0);
-  // yellow.matrix.rotate(-g_yellowAngle,0,0,1); 
-  // var yellowCoordinatesMat = new Matrix4(yellow.matrix);
-  // yellow.matrix.scale(0.25,.7,.5);
-  // yellow.matrix.translate(-.5,0,0);
-  // yellow.render();
-
-  // var box = new Cube();
-  // box.color = [1,0,1,1];
-  // box.matrix = yellowCoordinatesMat;
-  // box.matrix.translate(0,0.65,0);
-  // box.matrix.rotate(g_magentaAngle,0,0,1);
-  // box.matrix.scale(.3,.3,.3);
-  // box.matrix.translate(-.5,0,-.001);
-  // box.render();
-
-  // var K = 10.0;
-  // for (var i = 1; i < K; i++) {
-  //   var c = new Cube();
-  //   c.matrix.translate(-.8,1.9*i/K-1.0,0);
-  //   c.matrix.rotate(g_seconds*100,1,1,1);
-  //   c.matrix.scale(.1,0.5/K,1.0/K);
-  //   c.render();
-  // }
-
   // check the time at the end of the function and show on webpage
   var duration = performance.now() - startTime;
   sendTextToHTML("ms: " + Math.floor(duration) + " fps: "  + Math.floor(10000/duration)/10, "numdot");
@@ -272,6 +254,7 @@ function renderAllShapes(){
 }
 
 
+// this is my renderScene function
 // reference: 
 // https://static.wikia.nocookie.net/p-quest/images/7/7d/143.png/revision/latest?cb=20180824081535
 function renderSnorlax() {
@@ -298,9 +281,9 @@ function renderSnorlax() {
   snorlaxBodyFur.render();
 
   var snorlaxHead = new Cube();
-  snorlaxHead.matrix.rotate(0,0,0,1);
+  snorlaxHead.matrix.rotate(g_headAngle,0,0,1);
   snorlaxHead.matrix.scale(.8,.45,.8);
-  snorlaxHead.matrix.translate(-.497,.445,.065);
+  snorlaxHead.matrix.translate(-.497,.4,.065);
   snorlaxHead.color = snorlaxColor;
   snorlaxHead.render();
 
@@ -339,7 +322,7 @@ function renderSnorlax() {
   // named from my pov so snorlax {position} {feature} is technically mirrored
   var snorlaxsLeftEar = new Cube();
   snorlaxsLeftEar.matrix = new Matrix4(snorlaxHead.matrix);
-  snorlaxsLeftEar.matrix.rotate(0,0,0,1);
+  snorlaxsLeftEar.matrix.rotate(g_leftEarAngle,0,0,1);
   snorlaxsLeftEar.matrix.scale(.2,.3,.2);
   snorlaxsLeftEar.matrix.translate(0.5,3.3,2);
   snorlaxsLeftEar.color = snorlaxColor;
@@ -347,27 +330,43 @@ function renderSnorlax() {
 
   var snorlaxsRightEar = new Cube();
   snorlaxsRightEar.matrix = new Matrix4(snorlaxHead.matrix);
-  snorlaxsRightEar.matrix.rotate(0,0,0,1);
   snorlaxsRightEar.matrix.scale(.2,.3,.2);
   snorlaxsRightEar.matrix.translate(3.5,3.3,2);
+  snorlaxsRightEar.matrix.rotate(g_rightEarAngle,0,0,1);
   snorlaxsRightEar.color = snorlaxColor;
   snorlaxsRightEar.render();
 
   var snorlaxsLeftArmJ1 = new Cube();
   snorlaxsLeftArmJ1.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsLeftArmJ1.matrix.rotate(0,0,0,1);
+  snorlaxsLeftArmJ1.matrix.rotate(1,g_leftArmJoint1,0,1);
   snorlaxsLeftArmJ1.matrix.scale(.15,.25,.4);
-  snorlaxsLeftArmJ1.matrix.translate(-1,2.5,.9);
+  snorlaxsLeftArmJ1.matrix.translate(-0.8,2.5,.9);
   snorlaxsLeftArmJ1.color = snorlaxColor;
   snorlaxsLeftArmJ1.render();
 
   var snorlaxsLeftArmJ2 = new Cube();
   snorlaxsLeftArmJ2.matrix = new Matrix4(snorlaxsLeftArmJ1.matrix);
-  snorlaxsLeftArmJ2.matrix.rotate(0,0,0,1);
+  snorlaxsLeftArmJ2.matrix.rotate(5,0,g_leftArmJoint2,1);
   snorlaxsLeftArmJ2.matrix.scale(1,1,1);
-  snorlaxsLeftArmJ2.matrix.translate(-1,0,0);
+  snorlaxsLeftArmJ2.matrix.translate(-0.8,0,0);
   snorlaxsLeftArmJ2.color = snorlaxColor;
   snorlaxsLeftArmJ2.render();
+
+  var snorlaxsRightArmJ1 = new Cube();
+  snorlaxsRightArmJ1.matrix = new Matrix4(snorlaxBody.matrix);
+  snorlaxsRightArmJ1.matrix.scale(.15,.25,.4);
+  snorlaxsRightArmJ1.matrix.translate(6.66,2.5,.9);
+  snorlaxsRightArmJ1.matrix.rotate(1,g_rightArmJoint1,0,1);
+  snorlaxsRightArmJ1.color = snorlaxColor;
+  snorlaxsRightArmJ1.render();
+
+  var snorlaxsRightArmJ2 = new Cube();
+  snorlaxsRightArmJ2.matrix = new Matrix4(snorlaxsRightArmJ1.matrix);
+  snorlaxsRightArmJ2.matrix.scale(1,1,1);
+  snorlaxsRightArmJ2.matrix.translate(0.7,0,0);
+  snorlaxsRightArmJ2.matrix.rotate(-5,0,g_rightArmJoint2,1);
+  snorlaxsRightArmJ2.color = snorlaxColor;
+  snorlaxsRightArmJ2.render();
 
   var snorlaxsLeftClaw1 = new Cone();
   snorlaxsLeftClaw1.matrix = new Matrix4(snorlaxsLeftArmJ2.matrix);
@@ -408,22 +407,6 @@ function renderSnorlax() {
   snorlaxsLeftClaw5.matrix.scale(1,1,1);
   snorlaxsLeftClaw5.matrix.rotate(180,1,0,1);
   snorlaxsLeftClaw5.render();
-
-  var snorlaxsRightArmJ1 = new Cube();
-  snorlaxsRightArmJ1.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsRightArmJ1.matrix.rotate(0,0,0,1);
-  snorlaxsRightArmJ1.matrix.scale(.15,.25,.4);
-  snorlaxsRightArmJ1.matrix.translate(6.66,2.5,.9);
-  snorlaxsRightArmJ1.color = snorlaxColor;
-  snorlaxsRightArmJ1.render();
-
-  var snorlaxsRightArmJ2 = new Cube();
-  snorlaxsRightArmJ2.matrix = new Matrix4(snorlaxsRightArmJ1.matrix);
-  snorlaxsRightArmJ2.matrix.rotate(0,0,0,1);
-  snorlaxsRightArmJ2.matrix.scale(1,1,1);
-  snorlaxsRightArmJ2.matrix.translate(1,0,0);
-  snorlaxsRightArmJ2.color = snorlaxColor;
-  snorlaxsRightArmJ2.render();
 
   var snorlaxsRightClaw1 = new Cone();
   snorlaxsRightClaw1.matrix = new Matrix4(snorlaxsRightArmJ2.matrix);
@@ -467,7 +450,7 @@ function renderSnorlax() {
   
   var snorlaxsLeftFoot = new Cube();
   snorlaxsLeftFoot.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsLeftFoot.matrix.rotate(0,0,0,1);
+  snorlaxsLeftFoot.matrix.rotate(g_leftFootAngle,0,0,1);
   snorlaxsLeftFoot.matrix.scale(.33,.33,.2);
   snorlaxsLeftFoot.matrix.translate(0,.005,-1);
   snorlaxsLeftFoot.color = snorlaxFeetColor;
@@ -499,9 +482,9 @@ function renderSnorlax() {
 
   var snorlaxsRightFoot = new Cube();
   snorlaxsRightFoot.matrix = new Matrix4(snorlaxBody.matrix);
-  snorlaxsRightFoot.matrix.rotate(0,0,0,1);
   snorlaxsRightFoot.matrix.scale(.33,.33,.2);
   snorlaxsRightFoot.matrix.translate(2.05,.005,-1);
+  snorlaxsRightFoot.matrix.rotate(g_rightFootAngle,0,0,1);
   snorlaxsRightFoot.color = snorlaxFeetColor;
   snorlaxsRightFoot.render();
 
@@ -544,6 +527,32 @@ function renderSnorlax() {
   snorlaxsLeftPaw.matrix.translate(0.275,.15,-1);
   snorlaxsLeftPaw.color = snorlaxPawColor;
   snorlaxsLeftPaw.render();
+
+  var appleColor = [255/255,0/255,0/255,1.0];
+  var stemColor = [165/255,42/255,42/255,1.0];
+  var leafColor = [0/255,255/255,0/255,1.0];
+  if(appleSwitch){
+    var apple = new Cube();
+    var stem = new Cube();
+    var leaf = new Cone();
+    apple.matrix.rotate(0,0,0,1);
+    apple.matrix.scale(.25,.25,.25);
+    apple.matrix.translate(-0.5,2.5,0);
+    apple.color = appleColor;
+    stem.matrix = new Matrix4(apple.matrix);
+    stem.matrix.rotate(0,0,0,1);
+    stem.matrix.scale(.25,.5,.25);
+    stem.matrix.translate(1.5,2,1);
+    stem.color = stemColor;
+    leaf.matrix = new Matrix4(stem.matrix);
+    leaf.matrix.scale(5,5,5);
+    leaf.matrix.translate(0.4,0.08,0.1);
+    leaf.matrix.rotate(270,0,1,0);
+    leaf.color = leafColor;
+    stem.render();
+    apple.render();
+    leaf.render();
+  }
 }
 
 // set the text of an HTML element
