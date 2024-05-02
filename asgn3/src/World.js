@@ -1,28 +1,39 @@
 // ColoredPoint.js (c) 2012 matsuda
 // Vertex shader program
 var VSHADER_SOURCE = `
+  precision mediump float;
   attribute vec4 a_Position;
+  attribute vec2 a_UV;
+  varying vec2 v_UV;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_GlobalRotateMatrix;
+  uniform mat4 u_ViewMatrix;
+  uniform mat4 u_ProjectionMatrix;
   void main() {
-    gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+    v_UV = a_UV;
   }`
 
 // Fragment shader program
 var FSHADER_SOURCE = `
   precision mediump float;
+  varying vec2 v_UV;
   uniform vec4 u_FragColor;
   void main() {
     gl_FragColor = u_FragColor;
+    gl_FragColor = vec4(v_UV,1.0,1.0);
   }`
 
 // global variables
 let canvas;
 let gl;
 let a_Position;
+let a_UV;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
+let u_ProjectionMatrix;
+let u_ViewMatrix;
 let u_GlobalRotateMatrix;
 
 function setUpWebGL() {
@@ -54,6 +65,13 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of a_Position');
     return;
   }
+
+  // // Get the storage location of a_Position
+  a_UV = gl.getAttribLocation(gl.program, 'a_UV');
+  if (a_UV < 0) {
+    console.log('Failed to get the storage location of a_UV');
+    return;
+  }
   
   // Get the storage location of u_FragColor
   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
@@ -62,9 +80,22 @@ function connectVariablesToGLSL(){
     return;
   }
 
+
   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
   if(!u_ModelMatrix) {
     console.log("failed to get the storage loc of u_ModelMatrix");
+    return;
+  }
+
+  u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
+  if(!u_ProjectionMatrix) {
+    console.log("failed to get the storage loc of u_ProjectionMatrix");
+    return;
+  }
+
+  u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+  if(!u_ViewMatrix) {
+    console.log("failed to get the storage loc of u_ViewMatrix");
     return;
   }
 
@@ -136,8 +167,8 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
-  // gl.clear(gl.COLOR_BUFFER_BIT);
-    // renderAllShapes();
+  gl.clear(gl.COLOR_BUFFER_BIT);
+    renderAllShapes();
     requestAnimationFrame(tick);
 }
 
