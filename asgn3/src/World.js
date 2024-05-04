@@ -19,9 +19,11 @@ var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
+  uniform sampler2D u_Sampler0;
   void main() {
     gl_FragColor = u_FragColor;
     gl_FragColor = vec4(v_UV,1.0,1.0);
+    gl_FragColor = texture2D(u_Sampler0, v_UV);
   }`
 
 // global variables
@@ -35,6 +37,7 @@ let u_ModelMatrix;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_GlobalRotateMatrix;
+let u_Sampler0;
 
 function setUpWebGL() {
   // Retrieve <canvas> element
@@ -59,14 +62,14 @@ function connectVariablesToGLSL(){
     return;
   }
   
-  // // Get the storage location of a_Position
+  // Get the storage location of a_Position
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
     return;
   }
 
-  // // Get the storage location of a_Position
+  // Get the storage location of a_Position
   a_UV = gl.getAttribLocation(gl.program, 'a_UV');
   if (a_UV < 0) {
     console.log('Failed to get the storage location of a_UV');
@@ -105,6 +108,12 @@ function connectVariablesToGLSL(){
     return;
   }
 
+  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+  if(!u_Sampler0) {
+    console.log('failed to get u_Sampler0 location');
+    return false;
+  }
+
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
 
@@ -120,7 +129,6 @@ const CIRCLE = 2;
 let g_selectedColor = [1.0,1.0,1.0,1.0];
 let g_selectedSize=5;
 let g_selectedType = POINT;
-let g_numSegments = 100;
 let g_yellowAngle = 0;
 let g_magentaAngle = 0;
 let g_globalAngle = 0;
@@ -142,10 +150,38 @@ function addActionsForHtmlUI(){
   // // slider events
   document.getElementById('magentaSlide').addEventListener('mousemove', function() {g_magentaAngle = this.value; renderAllShapes(); });
   document.getElementById('yellowSlide').addEventListener('mousemove', function() {g_yellowAngle = this.value; renderAllShapes(); });
+  canvas.onmousemove = function(ev) { if(ev.buttons == 1) { click(ev)}};
 
   // size slider events
   document.getElementById('angleSlide').addEventListener('mousemove', function() {g_globalAngle = this.value; renderAllShapes(); });
 
+}
+
+function initTextures(){
+  var image = new Image();
+  if(!image){
+    console.log('failed to create image obj');
+    return false;
+  }
+  image.onload = function() {sendImageToTEXTURE0(image) };
+  image.src = 'sky.jpg';
+
+  return true;
+}
+
+function sendImageToTEXTURE0(image) {
+  var texture = gl.createTexture();
+  if(!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler0, 0);
+  console.log('finished loadTexture');
 }
 
 function main() {
@@ -158,17 +194,19 @@ function main() {
   // set up actions for HTML UI elements
   addActionsForHtmlUI(); 
 
+  initTextures();
+
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown = click;
-  // canvas.onmousemove = click;
-  canvas.onmousemove = function(ev) {if(ev.buttons == 1) { click(ev) } };
+  // canvas.onmousedown = click;
+  // // canvas.onmousemove = click;
+  // canvas.onmousemove = function(ev) {if(ev.buttons == 1) { click(ev) } };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
-    renderAllShapes();
+  // gl.clear(gl.COLOR_BUFFER_BIT);
+  //   renderAllShapes();
     requestAnimationFrame(tick);
 }
 
@@ -289,3 +327,5 @@ function sendTextToHTML(text,htmlID){
   }
   htmlElm.innerHTML = text;
 }
+
+console.log('done');
