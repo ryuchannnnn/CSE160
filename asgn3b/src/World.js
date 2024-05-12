@@ -408,18 +408,18 @@ var g_up=[0,1,0];
 var g_map = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [1,2,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
+  [1,0,3,0,0,0,0,0,0,0,0,0,0,3,0,1],
+  [1,0,0,0,0,0,0,3,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,3,0,0,4,0,1],
+  [1,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,3,0,1],
+  [1,0,3,0,0,0,0,0,2,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,3,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1],
+  [1,0,3,0,0,0,0,4,0,0,0,0,0,3,0,1],
   [1,2,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
@@ -457,8 +457,36 @@ function drawMap() {
         leaves.matrix.scale(3,3,3);
         leaves.renderFaster();
       }
+      if(g_map[x][y] == 3){
+        var groundApple = new Cube();
+        groundApple.color = [255/255,0/255,0/255,1.0];
+        groundApple.matrix.translate(0,-0.75,0);
+        groundApple.matrix.translate(x-8,0,y-8);
+        groundApple.matrix.scale(0.5,0.5,0.5);
+        groundApple.renderFaster();
+        var gAStem = new Cube();
+        var gAStemColor = [165/255,42/255,42/255,1.0];
+        gAStem.matrix = new Matrix4(groundApple.matrix);
+        gAStem.matrix.rotate(0,0,0,1);
+        gAStem.matrix.scale(.25,.5,.25);
+        gAStem.matrix.translate(1.5,2,1.25);
+        gAStem.color = gAStemColor;
+        gAStem.renderFaster();
+        var gALeaf = new Cone();
+        var gaLeafColor = [0/255,255/255,0/255,1.0];
+        gALeaf.matrix = new Matrix4(gAStem.matrix);
+        gALeaf.matrix.scale(5,5,5);
+        gALeaf.matrix.translate(0.4,0.08,0.1);
+        gALeaf.matrix.rotate(270,0,1,0);
+        gALeaf.color = gaLeafColor;
+        gALeaf.render();
+        }
+        if(g_map[x][y] == 4) {
+          var sleepSnorlax = new Snorlax(x,y);
+          sleepSnorlax.render();
+        }
+      }
     }
-  }
 }
 
 // var g_shapesList = [];
