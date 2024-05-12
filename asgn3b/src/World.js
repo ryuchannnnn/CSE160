@@ -405,28 +405,48 @@ var g_eye = [0,0,3];
 var g_at = [0,0,-100];
 var g_up=[0,1,0];
 
+// right
 var g_map = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,2,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
-  [1,0,3,0,0,0,0,0,0,0,0,0,0,3,0,1],
-  [1,0,0,0,0,0,0,3,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,3,0,0,4,0,1],
-  [1,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,3,0,1],
-  [1,0,3,0,0,0,0,0,2,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,3,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1],
-  [1,0,3,0,0,0,0,4,0,0,0,0,0,3,0,1],
-  [1,2,0,0,0,0,0,0,0,0,0,0,0,0,2,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], // this tree is next to snorlax 
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], // north
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,3,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,3,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 ];
 
+                    // left
+
 function drawMap() {
-  for(x=0;x<16;x++) {
-    for(y=0;y<16;y++) {
+  for(x=0;x<=32;x++) {
+    for(y=0;y<=32;y++) {
       // console.log(x,y);
       if(g_map[x][y] == 1) {
         var shrubs = new Cube();
@@ -554,17 +574,17 @@ function renderAllShapes(){
   var floor = new Cube();
   floor.color = [1.0,0.0,0.0,1.0];
   floor.textureNum=0;
-  floor.matrix.translate(0,-.75,0.0);
-  floor.matrix.scale(16,0,16);
-  floor.matrix.translate(-.5,0,-0.5);
+  floor.matrix.translate(7.75,-.75,8);
+  floor.matrix.scale(32,0,32);
+  floor.matrix.translate(-.475,0,-0.5);
   floor.renderFaster();
 
   // draw the sky 
   var sky = new Cube();
   sky.color = [1.0,0.0,0.0,1.0];
   sky.textureNum = 1;
-  sky.matrix.scale(50,50,50);
-  sky.matrix.translate(-.5,-.5,-0.5);
+  sky.matrix.scale(100,100,100);
+  sky.matrix.translate(-.275,-.5,-0.25);
   sky.renderFaster();
 
   // // draw the red body block
@@ -603,12 +623,19 @@ function renderAllShapes(){
   var duration = performance.now() - startTime;
   sendTextToHTML("ms: " + Math.floor(duration) + " fps: "  + Math.floor(10000/duration)/10, "numdot");
   
-
 }
 
-// this is my renderScene function
-// reference: 
-// https://static.wikia.nocookie.net/p-quest/images/7/7d/143.png/revision/latest?cb=20180824081535
+// set the text of an HTML element
+function sendTextToHTML(text,htmlID){
+  var htmlElm = document.getElementById(htmlID);
+  if(!htmlID) {
+    console.log("Failed to get " + htmlID + " from HTML");
+    return;
+  }
+  htmlElm.innerHTML = text;
+}
+
+
 function renderSnorlax() {
   var snorlaxColor = [95/255,150/255,170/255,1.0];
   var snorlaxFurColor = [241/255,229/255,215/255,0.95];
@@ -617,11 +644,21 @@ function renderSnorlax() {
   var snorlaxPawColor = [206/255, 194/255, 184/255, 1.0];
   var snorlaxNailColor = [255/255,255/255,255/255,1.0];
 
+  var snorlaxHead = new Cube();
+  snorlaxHead.matrix.translate(this.x - 33,0,this.y - 33);
+  var AttachBodytoHead = new Matrix4(snorlaxHead.matrix);
+  snorlaxHead.matrix.rotate(g_headAngle,0,0,1);
+  snorlaxHead.matrix.scale(.8,.45,.8);
+  snorlaxHead.matrix.translate(-.497,.4,.065);
+  snorlaxHead.color = snorlaxColor;
+  snorlaxHead.render();
+
   var snorlaxBody = new Cube();
   snorlaxBody.color = snorlaxColor;
+  snorlaxBody.matrix = AttachBodytoHead;
   snorlaxBody.matrix.rotate(0,0,0,1);
   snorlaxBody.matrix.scale(1,1,.9);
-  snorlaxBody.matrix.translate(-.5,-.8,-.001);
+  snorlaxBody.matrix.translate(-0.5,-.775,0);
   snorlaxBody.render();
 
   var snorlaxBodyFur = new Cube();
@@ -631,13 +668,6 @@ function renderSnorlax() {
   snorlaxBodyFur.matrix.scale(.8,.9,.04);
   snorlaxBodyFur.matrix.translate(0.13,0.1,-.9);
   snorlaxBodyFur.render();
-
-  var snorlaxHead = new Cube();
-  snorlaxHead.matrix.rotate(g_headAngle,0,0,1);
-  snorlaxHead.matrix.scale(.8,.45,.8);
-  snorlaxHead.matrix.translate(-.497,.4,.065);
-  snorlaxHead.color = snorlaxColor;
-  snorlaxHead.render();
 
   var snorlaxFace = new Cube();
   snorlaxFace.color = snorlaxFurColor;
@@ -670,8 +700,6 @@ function renderSnorlax() {
   snorlaxMouth.matrix.scale(.4,.05,.02);
   snorlaxMouth.matrix.translate(.75,7,-3);
   snorlaxMouth.render();
-
-  // named from my pov so snorlax {position} {feature} is technically mirrored
   var snorlaxsLeftEar = new Cube();
   snorlaxsLeftEar.matrix = new Matrix4(snorlaxHead.matrix);
   snorlaxsLeftEar.matrix.rotate(g_leftEarAngle,0,0,1);
@@ -905,16 +933,6 @@ function renderSnorlax() {
     apple.render();
     leaf.render();
   }
-}
-
-// set the text of an HTML element
-function sendTextToHTML(text,htmlID){
-  var htmlElm = document.getElementById(htmlID);
-  if(!htmlID) {
-    console.log("Failed to get " + htmlID + " from HTML");
-    return;
-  }
-  htmlElm.innerHTML = text;
 }
 
 console.log('done');

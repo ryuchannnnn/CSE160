@@ -276,5 +276,31 @@ class Snorlax {
         snorlaxsLeftPaw.matrix.translate(0.275,.15,-1);
         snorlaxsLeftPaw.color = snorlaxPawColor;
         snorlaxsLeftPaw.render();
+
+        var appleColor = [255/255,0/255,0/255,1.0];
+        var stemColor = [165/255,42/255,42/255,1.0];
+        var leafColor = [0/255,255/255,0/255,1.0];
+        if(appleSwitch){
+          var apple = new Cube();
+          var stem = new Cube();
+          var leaf = new Cone();
+          apple.matrix.rotate(0,0,0,1);
+          apple.matrix.scale(.25,.25,.25);
+          apple.matrix.translate(-0.5,2.5,0);
+          apple.color = appleColor;
+          stem.matrix = new Matrix4(apple.matrix);
+          stem.matrix.rotate(0,0,0,1);
+          stem.matrix.scale(.25,.5,.25);
+          stem.matrix.translate(1.5,2,1);
+          stem.color = stemColor;
+          leaf.matrix = new Matrix4(stem.matrix);
+          leaf.matrix.scale(5,5,5);
+          leaf.matrix.translate(0.4,0.08,0.1);
+          leaf.matrix.rotate(270,0,1,0);
+          leaf.color = leafColor;
+          stem.render();
+          apple.render();
+          leaf.render();
+        }
     }
 }
