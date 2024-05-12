@@ -9,7 +9,7 @@ Assignment 1 - Painting
 https://ryuchannnnn.github.io/CSE160/asgn1/src/ColoredPoints.html
 
 Assignment 2 - Blocky Animal
-https://ryuchannnnn.github.io/CSE160/asgn2/src/BlockyAnimal.html?
+https://ryuchannnnn.github.io/CSE160/asgn2/src/BlockyAnimal.html
 
 Assignment 3A - Creating a Virtual World
 https://ryuchannnnn.github.io/CSE160/asgn3/src/World.html
