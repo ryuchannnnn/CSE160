@@ -1,3 +1,5 @@
+// reference: 
+// https://static.wikia.nocookie.net/p-quest/images/7/7d/143.png/revision/latest?cb=20180824081535
 class Snorlax {
     constructor(x,y) {
         this.x = x;
