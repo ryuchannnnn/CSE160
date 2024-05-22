@@ -17,5 +17,5 @@ https://ryuchannnnn.github.io/CSE160/asgn3/src/World.html
 Assignment 3B - Creating a Virtual World
 https://ryuchannnnn.github.io/CSE160/asgn3b/src/World.html
 
-Assignment 5A - Exploring a High Level Graphics Library
+Assignment 5A/5B - Exploring a High Level Graphics Library
 https://ryuchannnnn.github.io/CSE160/asgn5/src/asgn5.html
