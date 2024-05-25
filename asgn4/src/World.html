@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>World</title>
+  </head>
+
+  <body onload="main()">
+    <canvas id="webgl" width="1000" height="1000">
+    Please use a browser that supports "canvas"
+    </canvas>
+    <p>
+
+    <p id="numdot"> XXX </p>
+
+    animation:
+    <button type="button" id="animateOnButton">On</button>
+    <button type="button" id="animateOffButton">Off</button>
+
+    <p>
+    Camera Angle <input type="range" min="90" max="270" value="180" class="slider" id="angleSlide">
+    <p>
+    Head Angle <input type="range" min="-10" max="10" value = "0" class="slider" id="headSlide">
+    <p>
+    Left Arm J1 Slide <input type="range" min="0" max="5" value = "0" class= "slider" id="leftArmJointSlide">
+    <p>
+    Left Arm J2 Slide <input type="range" min="0" max="5" value = "0" class= "slider" id="leftArmJoint2Slide">
+    <p>
+    Right Arm J1 Slide <input type="range" min="0" max="5" value = "0" class= "slider" id="rightArmJointSlide">
+    <p>
+    Right Arm J2 Slide <input type="range" min="-5" max="0" value = "-5" class= "slider" id="rightArmJoint2Slide">
+    <p>
+    Left Foot Slide <input type="range" min="-3" max="3" value = "0" class= "slider" id="leftFootAngleSlide">
+    <p>
+    Right Foot Slide <input type="range" min="-3" max="3" value = "0" class= "slider" id="rightFootAngleSlide">
+    <p>
+    Left Ear Slide <input type="range" min="-2" max="2" value = "0" class= "slider" id="leftEarAngleSlide">
+    <p>
+    Right Ear Slide <input type="range" min="-2" max="2" value = "0" class= "slider" id="rightEarAngleSlide">
+    </p>
+
+    <p>
+    Story: 
+    Here we have multiple snorlaxes in their natural habitat doing what they do best, sleeping <br>
+    under the shade given from the tree to have a cozy nap to avoid the sun. 
+    They are all in the forest with some apples that fell down from the trees which they can eat <br>
+    once they wake up. 
+    <p>
+    
+    <br>
+    The snorlax positioned in front of the camera has an apple that falls onto his head if you shift click!
+    Press the animation on button to see them all animated!
+
+    </p>
+  
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/cuon-matrix.cse160.js"></script>
+    <script src="../src/Triangle.js"></script>
+    <script src="../src/Circle.js"></script>
+    <script src="../src/Cone.js"></script>
+    <script src="../src/Point.js"></script> 
+    <script src="../src/Cube.js"></script> 
+    <script src="../src/World.js"></script>
+    <script src="../src/Camera.js"></script>
+    <script src ="../src/Snorlax.js"></script>
+  </body>
+</html>
