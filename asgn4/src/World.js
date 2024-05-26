@@ -7,6 +7,7 @@ var VSHADER_SOURCE = `
   attribute vec3 a_Normal;
   varying vec2 v_UV;
   varying vec3 v_Normal;
+  varying vec4 v_VertPos;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_GlobalRotateMatrix;
   uniform mat4 u_ViewMatrix;
@@ -15,6 +16,7 @@ var VSHADER_SOURCE = `
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
     v_Normal = a_Normal;
+    v_VertPos = u_ModelMatrix * a_Position;
   }`
 
 // Fragment shader program
@@ -27,7 +29,11 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler1;
   uniform sampler2D u_Sampler2;
   uniform sampler2D u_Sampler3;
+  uniform sampler2D u_Sampler4;
   uniform int u_whichTexture;
+  uniform vec3 u_lightPos;
+  uniform vec3 u_cameraPos;
+  varying vec4 v_VertPos;
   void main() {
     if(u_whichTexture == -3){
       gl_FragColor = vec4(v_Normal + 1.0/2.0, 1.0); // use normal debug
@@ -43,9 +49,43 @@ var FSHADER_SOURCE = `
       gl_FragColor = texture2D(u_Sampler2, v_UV); // use texture2
     } else if(u_whichTexture == 3) {
       gl_FragColor = texture2D(u_Sampler3, v_UV); // use texture3
+    } else if(u_whichTexture == 4) {
+      gl_FragColor = texture2D(u_Sampler4, v_UV); // use texture4
     } else {
       gl_FragColor = vec4(1,.2,.2,1);
     }
+
+    vec3 lightVector = u_lightPos-vec3(v_VertPos);
+    float r = length(lightVector);
+
+    // if (r<1.0) {
+    //   gl_FragColor = vec4(1,0,0,1);
+    // } else if(r < 2.0) {
+    //   gl_FragColor = vec4(0,1,0,1);
+    // }
+    // gl_FragColor = vec4(vec3(gl_FragColor)/(r*r),1);
+
+    // N dot L 
+    vec3 L = normalize(lightVector);
+    vec3 N = normalize(v_Normal);
+    float nDotL = max(dot(N,L), 0.0);
+
+    // reflection 
+    vec3 R = reflect(-L,N);
+
+    // eye 
+    vec3 E = normalize(u_cameraPos-vec3(v_VertPos));
+
+    // specular 
+    float specular = pow(max(dot(E,R), 0.0), 10.0);
+
+    vec3 diffuse = vec3(gl_FragColor) * nDotL * 0.7;
+    vec3 ambient = vec3(gl_FragColor) * 0.3;
+    gl_FragColor = vec4(specular + diffuse + ambient, 1.0);
+
+    // gl_FragColor = gl_FragColor * nDotL;
+    // gl_FragColor.a = 1.0;
+
   }`
 
 // global variables
@@ -63,9 +103,12 @@ let u_GlobalRotateMatrix;
 let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
-let u_Sampler3;               
+let u_Sampler3;
+let u_Sampler4;               
 let u_whichTexture;
 let camera;
+let u_cameraPos;
+let u_lightPos;
 
 function setUpWebGL() {
   // Retrieve <canvas> element
@@ -166,9 +209,27 @@ function connectVariablesToGLSL(){
     return false;
   }
 
+  u_Sampler4 = gl.getUniformLocation(gl.program, 'u_Sampler4');
+  if(!u_Sampler4) {
+    console.log('failed to get u_Sampler4 location');
+    return false;
+  }
+
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if(!u_whichTexture) {
     console.log('failed to get u_Texture location');
+    return false;
+  }
+
+  u_lightPos = gl.getUniformLocation(gl.program, 'u_lightPos');
+  if(!u_lightPos) {
+    console.log('failed to get u_lightPos location');
+    return false;
+  }
+
+  u_cameraPos = gl.getUniformLocation(gl.program, 'u_cameraPos');
+  if(!u_cameraPos) {
+    console.log('failed to get u_cameraPos location');
     return false;
   }
 
@@ -199,6 +260,7 @@ let g_zAngle = 0;
 let g_animation = false;
 let appleSwitch = false;
 let g_normalOn = false;
+let g_lightPos=[0,1,-2];
 
 // head angle
 let g_headAngle = 0;
@@ -221,6 +283,11 @@ function addActionsForHtmlUI(){
   document.getElementById('normalOff').onclick = function() {g_normalOn = false;};
   document.getElementById('animateOnButton').onclick = function() {g_animation = true;};
   document.getElementById('animateOffButton').onclick = function() {g_animation = false;};
+
+  // color slider events
+  document.getElementById('lightSlideX').addEventListener('mousemove', function(ev) {if(ev.buttons == 1) {g_lightPos[0] = this.value/100; renderAllShapes();}});
+  document.getElementById('lightSlideY').addEventListener('mousemove', function(ev) {if(ev.buttons == 1) {g_lightPos[1] = this.value/100; renderAllShapes();}});
+  document.getElementById('lightSlideZ').addEventListener('mousemove', function(ev) {if(ev.buttons == 1) {g_lightPos[2] = this.value/100; renderAllShapes();}});
 
   // size slider events
   document.getElementById('angleSlide').addEventListener('mousemove', function() {g_globalAngle = this.value; renderAllShapes(); });
@@ -268,6 +335,14 @@ function initTextures(){
   }
   imageLog.onload = function() {sendImageToTEXTURE3(imageLog) };
   imageLog.src = "oaklog.jpg";
+
+  var imagePokeball = new Image();
+  if(!imagePokeball){
+    console.log('failed to create image obj');
+    return false;
+  }
+  imagePokeball.onload = function() {sendImageToTEXTURE4(imagePokeball) };
+  imagePokeball.src = "pokeball.png";
   
   return true;
 }
@@ -332,6 +407,21 @@ function sendImageToTEXTURE3(image) {
   console.log('finished loadTexture3');
 }
 
+function sendImageToTEXTURE4(image) {
+  var texture = gl.createTexture();
+  if(!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);
+  gl.activeTexture(gl.TEXTURE4);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler4, 4);
+  console.log('finished loadTexture4');
+}
+
 
 function main() {
 
@@ -393,6 +483,8 @@ function updateAnimationAngles(){
       g_leftEarAngle = (2*Math.sin(g_seconds));
       g_rightEarAngle = (2*Math.sin(g_seconds));
   }
+
+  g_lightPos[0] = cos(g_seconds);
 }
 
 // https://www.toptal.com/developers/keycode
@@ -422,16 +514,17 @@ function keydown(ev){
 var g_eye = [0,0,3];
 var g_at = [0,0,-100];
 var g_up=[0,1,0];
+// var g_camera = new Camera();
 
 // right
 var g_map = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], // this tree is next to snorlax 
@@ -441,9 +534,9 @@ var g_map = [
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -454,7 +547,7 @@ var g_map = [
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,3,0,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -586,6 +679,17 @@ function renderAllShapes(){
 
   drawMap();
 
+  gl.uniform3f(u_lightPos, g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+
+  // gl.uniform3f(u_cameraPos, g_camera.eye.x, g_camera.eye.y,  g_camera.eye.z);
+
+  var light = new Cube();
+  light.color = [2,2,0,1];
+  light.matrix.translate(g_lightPos[0], g_lightPos[1], g_lightPos[2]);
+  light.matrix.scale(-.1,-.1,-.1);
+  light.matrix.translate(0,0,0);
+  light.render();
+
   renderSnorlax();
   // draw floor 
 
@@ -609,39 +713,11 @@ function renderAllShapes(){
   sky.matrix.translate(-.275,-.5,-0.25);
   sky.renderFaster();
 
-  // // draw the red body block
-  // var body = new Cube();
-  // body.color = [1.0,0.0,0.0,1.0];
-  // // body.textureNum=1;
-  // body.matrix.translate(-.25,-.75,0.0);
-  // body.matrix.rotate(-5,1,0,0);
-  // body.matrix.scale(0.5,.3,.5);
-  // body.renderFaster();
-
-  // // draw the yellow cube 
-  // var yellow = new Cube();
-  // yellow.color = [1,1,0,1];
-  // yellow.textureNum = 2;
-  // yellow.matrix.setTranslate(0,-.5,0.0);
-  // yellow.matrix.rotate(-5,1,0,0);
-  // yellow.matrix.rotate(-g_yellowAngle,0,0,1); 
-  // var yellowCoordinatesMat = new Matrix4(yellow.matrix);
-  // yellow.matrix.scale(0.25,.7,.5);
-  // yellow.matrix.translate(-.5,0,0);
-  // yellow.renderFaster();
-
-  // // draw the magenta block on top
-  // var magenta = new Cube();
-  // magenta.color = [1,0,1,1];
-  // // magenta.textureNum = 2;
-  // magenta.matrix = yellowCoordinatesMat;
-  // magenta.matrix.translate(0,0.65,0);
-  // magenta.matrix.rotate(g_magentaAngle,0,0,1);
-  // magenta.matrix.scale(.3,.3,.3);
-  // magenta.matrix.translate(-.5,0,-.001);
-  // magenta.renderFaster();
-
   var pokeball = new Sphere();
+  pokeball.color = [1.0,0.0,0.0,1.0];
+  // pokeball.textureNum=4;
+  pokeball.matrix.translate(4,0.5,0.0);
+  pokeball.render();
 
   // check the time at the end of the function and show on webpage
   var duration = performance.now() - startTime;
