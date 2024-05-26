@@ -4,7 +4,9 @@ var VSHADER_SOURCE = `
   precision mediump float;
   attribute vec4 a_Position;
   attribute vec2 a_UV;
+  attribute vec3 a_Normal;
   varying vec2 v_UV;
+  varying vec3 v_Normal;
   uniform mat4 u_ModelMatrix;
   uniform mat4 u_GlobalRotateMatrix;
   uniform mat4 u_ViewMatrix;
@@ -12,12 +14,14 @@ var VSHADER_SOURCE = `
   void main() {
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
     v_UV = a_UV;
+    v_Normal = a_Normal;
   }`
 
 // Fragment shader program
 var FSHADER_SOURCE = `
   precision mediump float;
   varying vec2 v_UV;
+  varying vec3 v_Normal;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
   uniform sampler2D u_Sampler1;
@@ -27,6 +31,8 @@ var FSHADER_SOURCE = `
   void main() {
     if(u_whichTexture == -2){
       gl_FragColor = u_FragColor; // use color
+    } else if(u_whichTexture == -3) {
+      gl_FragColor = vec4((v_Normal + 1.0/2.0, 1.0); // use normal debug
     } else if(u_whichTexture == -1) {
       gl_FragColor = vec4(v_UV,1.0,1.0); // use uv debug color
     } else if(u_whichTexture == 0) {
@@ -47,6 +53,7 @@ let canvas;
 let gl;
 let a_Position;
 let a_UV;
+let a_Normal;
 let u_FragColor;
 let u_Size;
 let u_ModelMatrix;
@@ -56,6 +63,8 @@ let u_GlobalRotateMatrix;
 let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
+let u_Sampler3;               
+let u_whichTexture;
 let camera;
 
 function setUpWebGL() {
@@ -85,6 +94,12 @@ function connectVariablesToGLSL(){
   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
   if (a_Position < 0) {
     console.log('Failed to get the storage location of a_Position');
+    return;
+  }
+
+  a_Normal= gl.getAttribLocation(gl.program, 'a_Normal');
+  if (a_Normal < 0) {
+    console.log('Failed to get the storage location of a_Normal');
     return;
   }
 
@@ -183,6 +198,7 @@ let g_yAngle = 0;
 let g_zAngle = 0;
 let g_animation = false;
 let appleSwitch = false;
+let g_normalOn = false;
 
 // head angle
 let g_headAngle = 0;
@@ -201,6 +217,8 @@ var greenColor = [0.0,1.0,0.0,1.0];
 // set up actions for HTML UI elements
 function addActionsForHtmlUI(){
   // button 
+  document.getElementById('normalOn').onclick = function() {g_normalOn = true;};
+  document.getElementById('normalOff').onclick = function() {g_normalOn = false;};
   document.getElementById('animateOnButton').onclick = function() {g_animation = true;};
   document.getElementById('animateOffButton').onclick = function() {g_animation = false;};
 
@@ -582,7 +600,12 @@ function renderAllShapes(){
   // draw the sky 
   var sky = new Cube();
   sky.color = [1.0,0.0,0.0,1.0];
-  sky.textureNum = 1;
+  if (g_normalOn) {
+    sky.textureNum = -3;
+}
+else {
+  sky.textNum = 1;
+}
   sky.matrix.scale(100,100,100);
   sky.matrix.translate(-.275,-.5,-0.25);
   sky.renderFaster();
