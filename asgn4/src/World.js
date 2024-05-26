@@ -29,10 +29,10 @@ var FSHADER_SOURCE = `
   uniform sampler2D u_Sampler3;
   uniform int u_whichTexture;
   void main() {
-    if(u_whichTexture == -2){
+    if(u_whichTexture == -3){
+      gl_FragColor = vec4(v_Normal + 1.0/2.0, 1.0); // use normal debug
+    } else if(u_whichTexture == -2){
       gl_FragColor = u_FragColor; // use color
-    } else if(u_whichTexture == -3) {
-      gl_FragColor = vec4((v_Normal + 1.0/2.0, 1.0); // use normal debug
     } else if(u_whichTexture == -1) {
       gl_FragColor = vec4(v_UV,1.0,1.0); // use uv debug color
     } else if(u_whichTexture == 0) {
@@ -599,12 +599,11 @@ function renderAllShapes(){
 
   // draw the sky 
   var sky = new Cube();
-  sky.color = [1.0,0.0,0.0,1.0];
+  sky.color = [0.0,0.0,1.0,1.0];
   if (g_normalOn) {
     sky.textureNum = -3;
-}
-else {
-  sky.textNum = 1;
+  } else {
+  sky.textureNum = 1;
 }
   sky.matrix.scale(100,100,100);
   sky.matrix.translate(-.275,-.5,-0.25);
@@ -641,6 +640,8 @@ else {
   // magenta.matrix.scale(.3,.3,.3);
   // magenta.matrix.translate(-.5,0,-.001);
   // magenta.renderFaster();
+
+  var pokeball = new Sphere();
 
   // check the time at the end of the function and show on webpage
   var duration = performance.now() - startTime;

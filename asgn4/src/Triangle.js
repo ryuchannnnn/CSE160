@@ -109,24 +109,24 @@ function drawTriangle3DUV(vertices,uv) {
   // Enable the assignment to a_Position variable
   gl.enableVertexAttribArray(a_Position);
 
-    // Create a buffer object
-    var uvBuffer = gl.createBuffer();
-    if (!uvBuffer) {
-      console.log('Failed to create the buffer object');
-      return -1;
-    }
+  // Create a buffer object
+  var uvBuffer = gl.createBuffer();
+  if (!uvBuffer) {
+    console.log('Failed to create the buffer object');
+    return -1;
+  }
   
-    // Bind the buffer object to target
-    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+  // Bind the buffer object to target
+  gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
     
-    // Write date into the buffer object
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.DYNAMIC_DRAW);
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.DYNAMIC_DRAW);
   
-    // Assign the buffer object to a_Position variable
-    gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
+  // Assign the buffer object to a_Position variable
+  gl.vertexAttribPointer(a_UV, 2, gl.FLOAT, false, 0, 0);
   
-    // Enable the assignment to a_Position variable
-    gl.enableVertexAttribArray(a_UV);
+  // Enable the assignment to a_Position variable
+  gl.enableVertexAttribArray(a_UV);
 
   gl.drawArrays(gl.TRIANGLES, 0, n);
 
@@ -134,7 +134,7 @@ function drawTriangle3DUV(vertices,uv) {
 
 }
 
-function drawTriangle3DUVNormal(vertices,uv,normal) {
+function drawTriangle3DUVNormal(vertices,uv,normals) {
   var n = vertices.length/3; // The number of vertices
 
   // Create a buffer object
@@ -185,7 +185,7 @@ function drawTriangle3DUVNormal(vertices,uv,normal) {
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
     
   // Write date into the buffer object
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(uv), gl.DYNAMIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.DYNAMIC_DRAW);
     
   // Assign the buffer object to a_Position variable
   gl.vertexAttribPointer(a_Normal, 3, gl.FLOAT, false, 0, 0);
