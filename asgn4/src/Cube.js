@@ -3,6 +3,7 @@ class Cube {
         this.type = "cube";
         this.color = [1.0,1.0,1.0,1.0];
         this.matrix = new Matrix4();
+        this.normalMatrix = new Matrix4();
         this.textureNum = -2;
         this.cubeVerts = 
         [0,0,0, 1,1,0, 1,0,0,//front
@@ -129,6 +130,7 @@ class Cube {
             gl.uniformMatrix4fv(u_ModelMatrix, false, this.matrix.elements);
     
             // drawTriangle3DUV(this.cubeVerts, this.uvVerts);
+            gl.uniformMatrix4fv(u_NormalMatrix, false, this.normalMatrix.elements);
 
             drawTriangle3DUVNormal(this.cubeVerts, this.uvVerts, this.normalVerts);
         }
