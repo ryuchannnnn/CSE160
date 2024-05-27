@@ -92,14 +92,6 @@ var FSHADER_SOURCE = `
     float angleToSurface = dot(lightToPointDirection, spotLightdirection);
     float cos = smoothstep(0.0, 20.0, angleToSurface);
     diffuse += spotLightdiffuse;
-    if (u_lightOn) {
-      if (u_whichTexture == 0) {
-        gl_FragColor = vec4(diffuse+ambient, 1.0);
-      } else {
-        gl_FragColor = vec4(specular * u_lightColor + diffuse * u_lightColor + ambient, 1.0);
-      }
-    }
-
     if(u_lightOn) {
       if(u_whichTexture ==  0) {
         gl_FragColor = vec4(specular + diffuse + ambient, 1.0);
