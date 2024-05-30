@@ -39,8 +39,8 @@ var FSHADER_SOURCE = `
   uniform vec3 u_lightPos;
   uniform vec3 lightPosition;
   uniform vec3 lightDirection;
-  uniform float lightInnerCutoff; // cos angle
-  uniform float lightOuterCutoff;
+  // uniform float lightInnerCutoff; // cos angle
+  // uniform float lightOuterCutoff;
   uniform vec3 u_spotLightPos;
   uniform vec3 u_lightColor; 
 
@@ -269,11 +269,11 @@ function connectVariablesToGLSL(){
     return false;
   };
 
-  u_lightColor= gl.getUniformLocation(gl.program, 'u_lightColor');
-  if(!u_lightColor) {
-    console.log('failed to get u_lightColor location');
-    return false;
-  };
+  // u_lightColor= gl.getUniformLocation(gl.program, 'u_lightColor');
+  // if(!u_lightColor) {
+  //   console.log('failed to get u_lightColor location');
+  //   return false;
+  // };
 
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
