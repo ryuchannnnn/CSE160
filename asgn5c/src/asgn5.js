@@ -20,6 +20,17 @@ function main() {
 
 	const scene = new THREE.Scene();
 
+	// fog
+	// https://threejs.org/manual/#en/fog
+	{
+		const near = 1;
+		const far = 2;
+		const color = 'gray';
+		scene.fog = new THREE.Fog( color, near, far );
+		scene.background = new THREE.Color( color );
+
+	}
+
 	{
 
 		const planeSize = 100;
@@ -351,6 +362,32 @@ function main() {
 		scene.add(cylinder);
 	}
 
+	// https://threejs.org/manual/#en/primitives
+
+	{
+		const geometry1 = new THREE.TetrahedronGeometry(1);
+		const material1 = new THREE.MeshPhongMaterial({ color: 0xffc111 });
+		const tetrahedron = new THREE.Mesh(geometry1, material1);
+		tetrahedron.castShadow = true;
+		tetrahedron.receiveShadow = true;
+		tetrahedron.position.set(2, 0.5, 3);
+		tetrahedron.rotation.y = 0;
+		scene.add(tetrahedron);
+		cubes.push(tetrahedron);
+	}
+
+	{
+		const geometry1 = new THREE.IcosahedronGeometry(1);
+		const material1 = new THREE.MeshPhongMaterial({ color: 0xcdb4db });
+		const cube1 = new THREE.Mesh(geometry1, material1);
+		cube1.castShadow = true;
+		cube1.receiveShadow = true;
+		cube1.position.set(-5,0.5,3);
+		scene.add(cube1);
+		cubes.push(cube1);
+		
+	  }
+
     {
         const mtlLoader = new MTLLoader();
         const objLoader = new OBJLoader();
@@ -365,6 +402,70 @@ function main() {
           });
         });
     }
+
+	makeLabel(400, 100, 'Hammy', [0, -2, 0]);
+
+	 // https://threejs.org/manual/#en/billboards
+	 function makeLabel(labelWidth, size, name, posxyz) {
+		const canvas = makeLabelCanvas(labelWidth, size, name);
+		const texture = new THREE.CanvasTexture(canvas);
+	
+		texture.minFilter = THREE.LinearFilter;
+		texture.wrapS = THREE.ClampToEdgeWrapping;
+		texture.wrapT = THREE.ClampToEdgeWrapping;
+	
+		const labelMaterial = new THREE.SpriteMaterial({
+		  map: texture,
+		  transparent: true,
+		});
+	
+		const root = new THREE.Object3D();
+	
+		const labelBaseScale = 0.01;
+		const label = new THREE.Sprite(labelMaterial);
+		root.add(label);
+		label.position.x = posxyz[0];
+		label.position.y = posxyz[1] + 4;
+		label.position.z = posxyz[2];
+	
+		label.scale.x = canvas.width * labelBaseScale;
+		label.scale.y = canvas.height * labelBaseScale;
+	
+		scene.add(root);
+		return root;
+	  }
+	
+	  function makeLabelCanvas(baseWidth, size, name) {
+		const borderSize = 2;
+		const ctx = document.createElement('canvas').getContext('2d');
+		const font = `${size}px bold sans-serif`;
+		ctx.font = font;
+		// measure how long the name will be
+		const textWidth = ctx.measureText(name).width;
+	
+		const doubleBorderSize = borderSize * 2;
+		const width = baseWidth + doubleBorderSize;
+		const height = size + doubleBorderSize;
+		ctx.canvas.width = width;
+		ctx.canvas.height = height;
+	
+		//resize
+		ctx.font = font;
+		ctx.textBaseline = 'middle';
+		ctx.textAlign = 'center';
+	
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, width, height);
+	
+		// scale to fit but don't stretch
+		const scaleFactor = Math.min(1, baseWidth / textWidth);
+		ctx.translate(width / 2, height / 2);
+		ctx.scale(scaleFactor, 1);
+		ctx.fillStyle = 'white';
+		ctx.fillText(name, 0, 0);
+	
+		return ctx.canvas;
+	  }
 
 	function render( time ) {
 
