@@ -10,7 +10,7 @@ function main() {
 	const fov = 100;
 	const aspect = 2; 
 	const near = 0.1;
-	const far = 5;
+	const far = 10;
 	const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 	// camera.position.z = 2;
 	camera.position.set(0,2,4);
@@ -24,7 +24,7 @@ function main() {
 	// https://threejs.org/manual/#en/fog
 	{
 		const near = 1;
-		const far = 2;
+		const far = 7;
 		const color = 'gray';
 		scene.fog = new THREE.Fog( color, near, far );
 		scene.background = new THREE.Color( color );
@@ -113,7 +113,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(0,0.5,0);
+		cube.position.set(1,0.5,2);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -126,7 +126,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(2,2.5,0);
+		cube.position.set(1,0.5,3);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -139,7 +139,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-2,2.5,0);
+		cube.position.set(1,0.5,3.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -152,7 +152,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-1,0.5,0);
+		cube.position.set(1,0.5,4);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -165,7 +165,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-2,0.5,0);
+		cube.position.set(-2,0.5,2);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -178,7 +178,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-3,0.5,0);
+		cube.position.set(-2,0.5,2.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -191,7 +191,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-4,0.5,0);
+		cube.position.set(-2,0.5,3);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -204,7 +204,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-5,0.5,0);
+		cube.position.set(-2,0.5,3.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -217,7 +217,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-6,0.5,0);
+		cube.position.set(-2,0.5,4);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -230,7 +230,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-7,0.5,0);
+		cube.position.set(-3,0.5,3);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -243,7 +243,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-8,0.5,0);
+		cube.position.set(-4,0.5,3);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -256,7 +256,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(1,0.5,0);
+		cube.position.set(-4,0.5,2);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -269,7 +269,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(2,0.5,0);
+		cube.position.set(-4,0.5,2.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -282,7 +282,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(3,0.5,0);
+		cube.position.set(-4,0.5,3.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -295,7 +295,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(4,0.5,0);
+		cube.position.set(-4,0.5,4);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -308,7 +308,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(5,0.5,0);
+		cube.position.set(3,0.5,2);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -321,7 +321,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(6,0.5,0);
+		cube.position.set(3,0.5,2.5);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -334,7 +334,7 @@ function main() {
 		const loader = new THREE.TextureLoader();
 		const material = new THREE.MeshPhongMaterial({map: loader.load('../assets/shinyMudkip.jpg')});
 		const cube = new THREE.Mesh( geometry, material );
-		cube.position.set(7,0.5,0);
+		cube.position.set(3,0.5,3);
 		scene.add( cube );
 		cubes.push(cube);
 	}
@@ -344,7 +344,7 @@ function main() {
 		const geometry = new THREE.ConeGeometry( 0.5, 0.5, 32); 
 		const material = new THREE.MeshBasicMaterial( {color: 0x800080} );
 		const cone = new THREE.Mesh(geometry, material );
-		cone.position.set(6,2,0);
+		cone.position.set(0,0.84,1);
 		scene.add( cone );
 	}
 
@@ -357,7 +357,7 @@ function main() {
 		const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 		const cylinder = new THREE.Mesh(geometry, material);
 		
-		cylinder.position.set(-6, 2, 0);
+		cylinder.position.set(3, 0.5, 4);
 		
 		scene.add(cylinder);
 	}
@@ -370,7 +370,7 @@ function main() {
 		const tetrahedron = new THREE.Mesh(geometry1, material1);
 		tetrahedron.castShadow = true;
 		tetrahedron.receiveShadow = true;
-		tetrahedron.position.set(2, 0.5, 3);
+		tetrahedron.position.set(3, 1, 0);
 		tetrahedron.rotation.y = 0;
 		scene.add(tetrahedron);
 		cubes.push(tetrahedron);
@@ -379,14 +379,57 @@ function main() {
 	{
 		const geometry1 = new THREE.IcosahedronGeometry(1);
 		const material1 = new THREE.MeshPhongMaterial({ color: 0xcdb4db });
-		const cube1 = new THREE.Mesh(geometry1, material1);
-		cube1.castShadow = true;
-		cube1.receiveShadow = true;
-		cube1.position.set(-5,0.5,3);
-		scene.add(cube1);
-		cubes.push(cube1);
+		const icosahedron = new THREE.Mesh(geometry1, material1);
+		icosahedron.castShadow = true;
+		icosahedron.receiveShadow = true;
+		icosahedron.position.set(-5,0.5,0);
+		scene.add(icosahedron);
+		cubes.push(icosahedron);
 		
-	  }
+	}
+
+	{
+		const geometry1 = new THREE.TorusGeometry(1)
+		const material1 = new THREE.MeshPhongMaterial({ color: 0xa2d2ff });
+		const torus = new THREE.Mesh(geometry1, material1);
+		torus.castShadow = true;
+		torus.receiveShadow = true;
+		torus.position.set(-3,1.5,-1);
+		torus.rotation.y = 0;
+		scene.add(torus);
+		cubes.push(torus);
+	}
+
+	{
+		// https://threejs.org/docs/#api/en/extras/core/Shape
+		const heartShape = new THREE.Shape();
+
+		heartShape.moveTo( 25, 25 );
+		heartShape.bezierCurveTo( 25, 25, 20, 0, 0, 0 );
+		heartShape.bezierCurveTo( - 30, 0, - 30, 35, - 30, 35 );
+		heartShape.bezierCurveTo( - 30, 55, - 10, 77, 25, 95 );
+		heartShape.bezierCurveTo( 60, 77, 80, 55, 80, 35 );
+		heartShape.bezierCurveTo( 80, 35, 80, 0, 50, 0 );
+		heartShape.bezierCurveTo( 35, 0, 25, 25, 25, 25 );
+	
+		const extrudeSettings = { 
+		  depth: 8, 
+		  bevelEnabled: true, 
+		  bevelSegments: 2, 
+		  steps: 2, 
+		  bevelSize: 1, 
+		  bevelThickness: 1 
+		};
+
+		const geometry = new THREE.ExtrudeGeometry( heartShape, extrudeSettings );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color: 0xFF0000}) );
+		mesh.castShadow = true;
+		mesh.receiveShadow = true;
+		mesh.scale.set(.03, .03 , .03);
+		mesh.rotation.x = -10;
+		mesh.position.set(-2,2,5);
+		scene.add(mesh);
+		}
 
     {
         const mtlLoader = new MTLLoader();
