@@ -65,7 +65,6 @@ function main() {
         	scene.background = rt.texture;
       	});
   	}
-	
 
 	{
 
@@ -387,6 +386,30 @@ function main() {
 		cubes.push(icosahedron);
 		
 	}
+
+	{
+		const geometry1 = new THREE.SphereGeometry(3, 8, -2)
+		const material1 = new THREE.MeshPhongMaterial({ color: 0xbde0fe });
+		const sphere = new THREE.Mesh(geometry1, material1);
+		sphere.castShadow = true;
+		sphere.receiveShadow = true;
+		sphere.position.set(0, 0.84, -3);
+		sphere.rotation.y = 0;
+		scene.add(sphere);
+		cubes.push(sphere);
+	}
+
+	{
+		const geometry1 = new THREE.OctahedronGeometry(1);
+		const material1 = new THREE.MeshPhongMaterial({ color: 0xffafcc });
+		const ocatahedron = new THREE.Mesh(geometry1, material1);
+		ocatahedron.castShadow = true;
+		ocatahedron.receiveShadow = true;
+		ocatahedron.position.set(5,1,0);
+		ocatahedron.rotation.y = 0;
+		scene.add(ocatahedron);
+		cubes.push(ocatahedron);
+	  }
 
 	{
 		const geometry1 = new THREE.TorusGeometry(1)
