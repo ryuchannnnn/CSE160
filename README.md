@@ -22,3 +22,6 @@ https://ryuchannnnn.github.io/CSE160/asgn4/src/World.html
 
 Assignment 5A/5B - Exploring a High Level Graphics Library
 https://ryuchannnnn.github.io/CSE160/asgn5/src/asgn5.html
+
+Assignment 5C - Exploring a High Level Graphics Library
+https://ryuchannnnn.github.io/CSE160/asgn5c/src/asgn5.html
